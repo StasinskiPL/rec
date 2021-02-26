@@ -43,12 +43,29 @@ export const editUser = createAsyncThunk("dashboard/edit", async ({ user }) => {
   }
 });
 
+export const deleteUser = createAsyncThunk(
+  "dashboard/delete",
+  async ({ id }) => {
+    try {
+      await userApi.delete("/posts/1", {
+        id,
+      });
+      return id;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 const dashboardSlide = createSlice({
   name: "dashboard",
   initialState,
   reducers: {
     selectUser: (state, { payload }) => {
       state.selectedUser = payload;
+    },
+    resetSelectUser: (state) => {
+      state.selectedUser = null;
     },
     resetAddUserState: (state) => {
       state.addUserState = "idle";
@@ -94,11 +111,15 @@ const dashboardSlide = createSlice({
         }
         return user;
       });
-
       state.editUserState = "fulfilled";
     },
     [editUser.rejected]: (state) => {
       state.editUserState = "fulfilled";
+    },
+    ///////
+    [deleteUser.fulfilled]: (state, { payload }) => {
+      state.selectedUser = null;
+      state.users = state.users.filter((user) => user.id !== payload);
     },
   },
 });
@@ -107,6 +128,7 @@ export const {
   resetAddUserState,
   selectUser,
   resetEditUserState,
+  resetSelectUser,
 } = dashboardSlide.actions;
 
 export default dashboardSlide.reducer;

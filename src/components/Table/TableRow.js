@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { selectUser } from "../../store/dashboard";
 
-const TableRow = ({ user }) => {
+const TableRow = ({ user, setOpenDeleteModal }) => {
   const { id, name, username, email, address } = user;
   const dispatch = useDispatch();
   const history = useHistory();
@@ -11,6 +11,11 @@ const TableRow = ({ user }) => {
   const handleEdit = () => {
     dispatch(selectUser(id));
     history.push("/edit");
+  };
+
+  const handleDelete = () => {
+    dispatch(selectUser(id));
+    setOpenDeleteModal(true);
   };
 
   return (
@@ -26,7 +31,7 @@ const TableRow = ({ user }) => {
         </Button>
       </td>
       <td>
-        <Button size="sm" variant="danger">
+        <Button size="sm" variant="danger" onClick={handleDelete}>
           Delete
         </Button>
       </td>
