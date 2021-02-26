@@ -25,7 +25,7 @@ const DeleteModal = ({ setOpenDeleteModal, openDeleteModal }) => {
         <Modal.Title>Confirm</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        Do you want to delete user with id: {selectedUser}
+        Do you want to delete user with id: <strong>{selectedUser}</strong>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-primary" onClick={handleClose}>

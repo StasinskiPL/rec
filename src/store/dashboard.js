@@ -9,6 +9,7 @@ const initialState = {
   editUserState: "idle",
   users: [],
   selectedUser: null,
+  lastSortType: null,
 };
 
 export const fetchUsers = createAsyncThunk("dashboard/fetch", async () => {
@@ -73,6 +74,33 @@ const dashboardSlide = createSlice({
     resetEditUserState: (state) => {
       state.editUserState = "idle";
     },
+    sortUsers: (state, { payload }) => {
+      const searchType = payload.type.toLowerCase();
+      if (searchType === state.lastSortType) {
+        state.users = state.users.reverse();
+      } else if (searchType === "city") {
+        state.users.sort((a, b) => {
+          if (a.address?.city < b.address?.city) {
+            return -1;
+          }
+          if (a.address?.city > b.address?.city) {
+            return 1;
+          }
+          return 0;
+        });
+      } else {
+        state.users = state.users.sort((a, b) => {
+          if (a[searchType] < b[searchType]) {
+            return -1;
+          }
+          if (a[searchType] > b[searchType]) {
+            return 1;
+          }
+          return 0;
+        });
+      }
+      state.lastSortType = searchType;
+    },
   },
   extraReducers: {
     [fetchUsers.pending]: (state) => {
@@ -92,7 +120,7 @@ const dashboardSlide = createSlice({
       state.addUserState = "pending";
     },
     [addUser.fulfilled]: (state, { payload }) => {
-      const user = payload.user;
+      const user = payload;
       user.id = new Date().getTime();
       state.users.push(user);
       state.addUserState = "fulfilled";
@@ -129,6 +157,7 @@ export const {
   selectUser,
   resetEditUserState,
   resetSelectUser,
+  sortUsers,
 } = dashboardSlide.actions;
 
 export default dashboardSlide.reducer;

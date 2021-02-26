@@ -54,7 +54,11 @@ const EditForm = () => {
       onSubmit={handleSubmit(onSubmit)}>
       {INPUTS.map((input) => {
         const defaultValue =
-          input === "city" ? userValues.address.city : userValues[input];
+          input === "city"
+            ? userValues.address
+              ? userValues.address.city
+              : ""
+            : userValues[input];
         return (
           <Form.Group key={input} className="d-flex align-items-center">
             <Form.Label className="px-2">{input}</Form.Label>
