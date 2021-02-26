@@ -8,7 +8,6 @@ const TABLE_HEADERS = "Id_Name_Username_Email_City_Edit_Delete";
 
 const TableComponent = () => {
   const { loading, users } = useSelector((state) => state.dashboard);
-  console.log(users);
   if (loading) {
     return <Loading />;
   }
